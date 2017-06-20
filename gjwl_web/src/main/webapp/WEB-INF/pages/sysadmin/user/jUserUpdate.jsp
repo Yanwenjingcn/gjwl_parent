@@ -7,6 +7,7 @@
 
 <body>
 <form name="icform" method="post">
+<!-- 默默的传回要修改的数据的id -->
       <input type="hidden" name="id" value="${id}"/>
 <div id="menubar">
 <div id="middleMenubar">

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    
+       <hibernate-mapping package="com.ywj.gjwl.domain">
+    	<class name="Userinfo" table="user_info_p">
+    	
+    	<id name="id" column="USER_INFO_ID">
+			<generator class="assigned"></generator>
+		</id>
+		
+		
+		<!-- 
+		USER_INFO_ID         VARCHAR(40) not null,
+   NAME                 VARCHAR(20),
+   MANAGER_ID           VARCHAR(40),
+   JOIN_DATE            TIMESTAMP,
+   SALARY               NUMERIC(8, 2),
+   BIRTHDAY             TIMESTAMP,
+   GENDER               CHAR(1),
+   STATION              VARCHAR(20),
+   TELEPHONE            VARCHAR(100),
+   DEGREE               INT comment '0-超级管理员
+            1-跨部门跨人员
+            2-管理所有下属部门和人员
+            3-管理本部门
+            4-普通员工
+            
+            
+            0作为内部控制只对sysdebug，用户不能进行添加',
+   REMARK               VARCHAR(600),
+   ORDER_NO             INT,
+   CREATE_BY            VARCHAR(40) comment '登录人编号',
+   CREATE_DEPT          VARCHAR(40) comment '登录人所属部门编号',
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_BY            VARCHAR(40),
+   UPDATE_TIME          TIMESTAMP,
+		 -->
+		<property name="name" column="NAME"></property>
+		<property name="joinDate" column="JOIN_DATE"></property>
+		<property name="salary" column="SALARY"></property>
+		<property name="birthday" column="BIRTHDAY"></property>
+		<property name="gender" column="GENDER"></property>
+		<property name="station" column="STATION"></property>
+		<property name="telephone" column="TELEPHONE"></property>
+		<property name="degree" column="DEGREE"></property>
+		<property name="remark" column="REMARK"></property>
+		<property name="orderNo" column="ORDER_NO"></property>
+		<property name="createBy" column="CREATE_BY"></property>
+		<property name="createDept" column="CREATE_DEPT"></property>
+		<property name="createTime" column="CREATE_TIME"></property>
+		<property name="updateBy" column="UPDATE_BY"></property>
+		<property name="updateTime" column="UPDATE_TIME"></property>
+		
+		<!-- 用户与部门是多对一的关系，其中用户是多的一方 -->
+		<many-to-one name="manager" column="MANAGER_ID" class="User"></many-to-one>
+
+    	</class>
+    
+    </hibernate-mapping>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    
+    
+    
+	<!-- 
+	 *  USER_ID              VARCHAR(40) not null,
+   DEPT_ID              VARCHAR(40),
+   
+   
+   USER_NAME            VARCHAR(50) comment '不能重复,可为中文',
+   PASSWORD             VARCHAR(64) comment 'shiro MD5密码32位',
+   STATE                INT comment '1启用0停用',
+   
+   CREATE_BY            VARCHAR(40) comment '登录人编号',
+   CREATE_DEPT          VARCHAR(40) comment '登录人所属部门编号',
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_BY            VARCHAR(40),
+   UPDATE_TIME          TIMESTAMP,
+	 */ -->
+	 
+    <hibernate-mapping package="com.ywj.gjwl.domain">
+    	<class name="User" table="user_p" >
+    	
+    	<id name="id" column="USER_ID">
+			<generator class="assigned"></generator>
+		</id>
+		<property name="userName" column="USER_NAME"></property>
+		<property name="password" column="PASSWORD"></property>
+		<property name="state" column="STATE"></property>
+		<property name="createBy" column="CREATE_BY"></property>
+		<property name="createDept" column="CREATE_DEPT"></property>
+		<property name="createTime" column="CREATE_TIME"></property>
+		<property name="updateBy" column="UPDATE_BY"></property>
+		<property name="updateTime" column="UPDATE_TIME"></property>
+    	
+    	<!-- 配置与部门的多对一关系 -->
+    	<many-to-one name="dept" column="DEPT_ID" class="Dept"/>
+    	
+    	<!-- 用户表与用户扩展表是一对一配置
+    	  private Userinfo userinfo;
+    		这里以用户表的来维护关系
+    	-->
+    	<one-to-one name="userinfo"  class="Userinfo" cascade="all"/>
+    	
+    	<!-- 用户与角色是多对多的关系 -->
+    	<set name="roles" table="role_user_p">
+    		<key column="USER_ID"/>
+    		<many-to-many class="Role" column="ROLE_ID"/>	
+    	</set>
+    	
+    	</class>
+    
+    </hibernate-mapping>

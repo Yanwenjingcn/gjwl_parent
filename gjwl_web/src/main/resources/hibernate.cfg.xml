@@ -24,6 +24,9 @@
 		
 		<!--  加载映射文件-->
 		<mapping resource="com/ywj/gjwl/domain/Dept.hbm.xml"></mapping>
+		<mapping resource="com/ywj/gjwl/domain/User.hbm.xml"></mapping>
+		<mapping resource="com/ywj/gjwl/domain/Userinfo.hbm.xml"></mapping>
+		<mapping resource="com/ywj/gjwl/domain/Role.hbm.xml"></mapping>
 		
 	</session-factory>
 	</hibernate-configuration>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+    
+    <hibernate-mapping package="com.ywj.gjwl.domain">
+	<class name="Role" table="role_p">
+	
+	<!-- ROLE_ID              VARCHAR(40) not null,
+   NAME                 VARCHAR(30),
+   REMARK               VARCHAR(200),
+   ORDER_NO             INT,
+   
+   CREATE_BY            VARCHAR(40),
+   CREATE_DEPT          VARCHAR(40),
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_BY            VARCHAR(40),
+   UPDATE_TIME          TIMESTAMP, 
+   -->
+		<id name="id" column="ROLE_ID">
+			<generator class="uuid"></generator>
+		</id>
+		
+		<property name="name" column="NAME"></property>
+		<property name="remark" column="REMARK"></property>
+		<property name="orderNo" column="ORDER_NO"></property>
+		
+		<property name="createBy" column="CREATE_BY"></property>
+		<property name="createDept" column="CREATE_DEPT"></property>
+		<property name="createTime" column="CREATE_TIME"></property>
+		<property name="updateBy" column="UPDATE_BY"></property>
+		<property name="updateTime" column="UPDATE_TIME"></property>
+		
+		<!-- 与用户是多对多的关系  private Set<User> users=new HashSet<User>(0);
+		这个里面的table的内容是中间表的名字！！！！！！！！！
+		请注意！！！！！！！！！！！！是中间表的名字啊！！！！！！！
+		 -->
+		<set name="users" table="role_user_p">
+			<key column="ROLE_ID"/>
+			<many-to-many class="User" column="USER_ID"/>
+		</set>
+	</class>
+</hibernate-mapping>
+    

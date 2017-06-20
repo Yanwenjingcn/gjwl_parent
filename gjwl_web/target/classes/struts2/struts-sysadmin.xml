@@ -11,6 +11,7 @@
 	<!-- struts的包名是唯一的， -->
 	<package name="sysadmin" namespace="/sysadmin" extends="struts-default">
 	
+	<!-- 这个里面的class的内容是spring中id的值 -->
 		<action name="deptAction_*" class="deptAction" method="{1}">
 			<result name="list">/WEB-INF/pages/sysadmin/dept/jDeptList.jsp</result>
 			<result name="toview">/WEB-INF/pages/sysadmin/dept/jDeptView.jsp</result>
@@ -18,6 +19,24 @@
 			<!-- 重定向到Action,这么写 ,并且这些页面跳转是可以重用的-->
 			<result name="alist" type="redirectAction">deptAction_list</result>
 			<result name="toupdate">/WEB-INF/pages/sysadmin/dept/jDeptUpdate.jsp</result>
+		</action>
+		
+		<action name="userAction_*" class="userAction" method="{1}">
+			<result name="list">/WEB-INF/pages/sysadmin/user/jUserList.jsp</result>
+			<result name="toview">/WEB-INF/pages/sysadmin/user/jUserView.jsp</result>
+			<result name="tocreate">/WEB-INF/pages/sysadmin/user/jUserCreate.jsp</result>
+			<!-- 重定向到Action,这么写 ,并且这些页面跳转是可以重用的-->
+			<result name="alist" type="redirectAction">userAction_list</result>
+			<result name="toupdate">/WEB-INF/pages/sysadmin/user/jUserUpdate.jsp</result>
+		</action>
+		
+		<action name="roleAction_*" class="roleAction" method="{1}">
+			<result name="list">/WEB-INF/pages/sysadmin/role/jRoleList.jsp</result>
+			<result name="toview">/WEB-INF/pages/sysadmin/role/jRoleView.jsp</result>
+			<result name="tocreate">/WEB-INF/pages/sysadmin/role/jRoleCreate.jsp</result>
+			<!-- 重定向到Action,这么写 ,并且这些页面跳转是可以重用的-->
+			<result name="alist" type="redirectAction">roleAction_list</result>
+			<result name="toupdate">/WEB-INF/pages/sysadmin/role/jRoleUpdate.jsp</result>
 		</action>
 
 

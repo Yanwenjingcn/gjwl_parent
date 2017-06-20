@@ -13,6 +13,15 @@
 		
 		<!-- 子部門與父部門的自关联 -->
 		<many-to-one name="parent" class="Dept" column="PARENT_ID"></many-to-one>
+		
+		<!-- 部门与用户是一对多关系
+		这个colcumn里面对应的是多方中的外键，其实也就是自己主键 -->
+		<set name="users">
+			<key column="DEPT_ID"/>
+			<one-to-many class="User"/>
+		</set>
+		
+		
 	</class>
 </hibernate-mapping>
 
