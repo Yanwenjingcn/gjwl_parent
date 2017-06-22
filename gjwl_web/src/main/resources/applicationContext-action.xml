@@ -32,4 +32,9 @@
 		scope="prototype">
 		<property name="roleService" ref="roleService"></property>
 	</bean>
+	
+	<bean id="moduleAction" class="com.ywj.gjwl.action.sysadmin.ModuleAction"
+		scope="prototype">
+		<property name="moduleService" ref="moduleService"></property>
+	</bean>
 </beans>

@@ -25,6 +25,9 @@ public class Role extends BaseEntity {
 	//============================
 	//角色与用户是多对多的关系
 	private Set<User> users=new HashSet<User>(0);
+	
+	//千万不要忘记getset方法啊！！！！
+	private Set<Module> modules=new HashSet<Module>(0);//模块与角色是多对多的关系，配置双方关系
 	//============================
 	
 	public String getId() {
@@ -56,6 +59,12 @@ public class Role extends BaseEntity {
 	}
 	public void setUsers(Set<User> users) {
 		this.users = users;
+	}
+	public Set<Module> getModules() {
+		return modules;
+	}
+	public void setModules(Set<Module> modules) {
+		this.modules = modules;
 	}
 	
 	

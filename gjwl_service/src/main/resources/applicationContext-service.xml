@@ -36,5 +36,9 @@
 	<bean id="roleService" class="com.ywj.gjwl.service.impl.RoleServiceImpl">
 		<property name="baseDao" ref="baseDao"></property>
 	</bean>
+	
+	<bean id="moduleService" class="com.ywj.gjwl.service.impl.ModuleServiceImpl">
+		<property name="baseDao" ref="baseDao"></property>
+	</bean>
 
 </beans>

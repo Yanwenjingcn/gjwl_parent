@@ -27,6 +27,7 @@
 		<mapping resource="com/ywj/gjwl/domain/User.hbm.xml"></mapping>
 		<mapping resource="com/ywj/gjwl/domain/Userinfo.hbm.xml"></mapping>
 		<mapping resource="com/ywj/gjwl/domain/Role.hbm.xml"></mapping>
+		<mapping resource="com/ywj/gjwl/domain/Module.hbm.xml"></mapping>
 		
 	</session-factory>
 	</hibernate-configuration>

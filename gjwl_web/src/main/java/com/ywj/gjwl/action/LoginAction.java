@@ -1,6 +1,12 @@
 package com.ywj.gjwl.action;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+
+import com.ywj.gjwl.domain.User;
 import com.ywj.gjwl.utils.SysConstant;
+import com.ywj.gjwl.utils.UtilFuns;
 
 /**
  * @Description: 登录和退出类
@@ -33,6 +39,30 @@ public class LoginAction extends BaseAction {
 //			return SUCCESS;
 //		}
 //		return "login";
+		
+		if(UtilFuns.isEmpty(username)){
+			return "login";
+		}
+		
+		try {
+			//1.得到Subject
+			Subject subject = SecurityUtils.getSubject();
+			//2.调用登录方法
+			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+			subject.login(token);//当这一代码执行时，就会自动跳入到AuthRealm中认证方法
+			
+			//3.登录成功时，就从Shiro中取出用户的登录信息
+			User user = (User) subject.getPrincipal();
+			
+			//4.将用户放入session域中
+			session.put(SysConstant.CURRENT_USER_INFO, user);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.put("errorInfo", "对不起，用户或密码错误！");
+			return "login";
+		}
 		
 		return SUCCESS;
 	}

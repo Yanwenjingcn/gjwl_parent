@@ -37,7 +37,7 @@
 
 	
 	
-	<!--Shiro安全框架产生代理子类的方式： 使用cglib方式-->
+	<!--Shiro安全框架产生代理子类的方式： 使用cglib方式         放在事务管理器之前配置-->
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	
 	<!-- 3.事务管理器-->
@@ -69,5 +69,6 @@
 	<import resource="classpath*:applicationContext-action.xml"></import>
 	<import resource="classpath*:applicationContext-dao.xml"></import>
 	<import resource="classpath*:applicationContext-service.xml"></import>
+	<import resource="classpath*:applicationContext-shiro.xml"/>
 
 </beans>

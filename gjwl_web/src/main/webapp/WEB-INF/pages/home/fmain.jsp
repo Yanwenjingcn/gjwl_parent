@@ -2,6 +2,13 @@
 <html>
 <head>
 <title>商务综合管理平台</title>
+<script type="text/javascript">
+//self.location
+	if(self.location!=top.location){
+		top.location=self.location;
+	}
+
+</script>
 </head>
 <frameset rows="125,*" name="topFrameset" border="0">
 	<frame name="top_frame" scrolling="no"  target="middleFrameSet" src="homeAction_title">	
