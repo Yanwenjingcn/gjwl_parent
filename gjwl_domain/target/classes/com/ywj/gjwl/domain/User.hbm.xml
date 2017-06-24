@@ -48,7 +48,7 @@
     	<!-- 用户与角色是多对多的关系 -->
     	<set name="roles" table="role_user_p">
     		<key column="USER_ID"/>
-    		<many-to-many class="Role" column="ROLE_ID"/>	
+    		<many-to-many class="Role" column="ROLE_ID" order-by="ORDER_NO"/>	
     	</set>
     	
     	</class>

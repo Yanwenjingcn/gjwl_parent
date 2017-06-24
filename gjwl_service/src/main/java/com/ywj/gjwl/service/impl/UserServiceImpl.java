@@ -8,7 +8,9 @@ import java.util.UUID;
 import com.ywj.gjwl.dao.BaseDao;
 import com.ywj.gjwl.domain.User;
 import com.ywj.gjwl.service.UserService;
+import com.ywj.gjwl.utils.Encrypt;
 import com.ywj.gjwl.utils.Page;
+import com.ywj.gjwl.utils.SysConstant;
 import com.ywj.gjwl.utils.UtilFuns;
 
 public class UserServiceImpl implements UserService {
@@ -40,6 +42,9 @@ public class UserServiceImpl implements UserService {
 			String id=UUID.randomUUID().toString();
 			entity.setId(id);
 			entity.getUserinfo().setId(id);
+			
+			//加入shiro后的bug修复，为用户设置初始密码,这时候是需要加密的，盐是用户名
+			entity.setPassword(Encrypt.md5(SysConstant.DEFAULT_PASS, entity.getUserName()));
 		}
 		baseDao.saveOrUpdate(entity);
 

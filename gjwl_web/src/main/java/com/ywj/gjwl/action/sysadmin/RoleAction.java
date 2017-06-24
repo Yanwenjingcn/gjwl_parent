@@ -1,15 +1,25 @@
 package com.ywj.gjwl.action.sysadmin;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts2.ServletActionContext;
 import org.springframework.ui.Model;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
 import com.ywj.gjwl.action.BaseAction;
 import com.ywj.gjwl.domain.Dept;
+import com.ywj.gjwl.domain.Module;
 import com.ywj.gjwl.domain.Role;
+import com.ywj.gjwl.domain.User;
+import com.ywj.gjwl.exception.SysException;
 import com.ywj.gjwl.service.DeptService;
+import com.ywj.gjwl.service.ModuleService;
 import com.ywj.gjwl.service.RoleService;
 import com.ywj.gjwl.utils.Page;
 
@@ -41,11 +51,16 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 	}
 	
 
+	private ModuleService moduleService;
+	public void setModuleService(ModuleService moduleService) {
+		this.moduleService = moduleService;
+	}
 	// ==================================
 
 	/*
 	 * 分页的功能
 	 */
+
 
 	public String list() {
 		page = roleService.findPage("from Role", page, Role.class, null);
@@ -60,11 +75,16 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 	/*
 	 * 查看
 	 */
-	public String toview() {
+	public String toview() throws Exception{
 		// 1.调用业务方法，根据id，得到对象
 		// 这种查看某项的具体内容的东西，都会从前台传送一个id号过来，这个id号也是可以被model直接接受的。
-		Role role = roleService.get(Role.class, model.getId());
-		super.push(role);
+		try {
+			Role role = roleService.get(Role.class, model.getId());
+			super.push(role);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SysException("请先勾选内容");
+		}
 		return "toview";
 	}
 
@@ -135,4 +155,108 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 		
 		return "alist";
 	}
+	
+	
+	
+/*
+ * 权限管理
+ */
+	public String tomodule() throws Exception {
+		//1.根据角色id，得到角色的对象
+		Role obj=roleService.get(Role.class, model.getId());
+		//2.将结果压入值栈
+		super.push(obj);
+		
+		return "tomodule";
+	}
+	
+	
+	
+	/**
+	 * 为了使用 zTree树，就要组织好zTree树所使用的json数据
+	 * json数据结构如下：
+	 * [{"id":"模块的id","pId":"父模块id","name":"模块名","checked":"true|false"},{"id":"模块的id","pId":"父模块id","name":"模块名","checked":"true|false"}]
+	 * 
+	 * 常用的json插件有哪些？
+	 * json-lib    fastjson     struts-json-plugin-xxx.jar,手动拼接
+	 * 
+	 * 如何输出?
+	 * 借助于response对象输出数据
+	 */
+	
+	public String roleModuleJsonStr() throws Exception {
+		//1.获取当前用户的角色信息
+		Role role=roleService.get(Role.class, model.getId());
+		//2.通过对象导航的方式加载出当前的模块列表
+		Set<Module> moduleSet=role.getModules();
+		
+		//3.加载出所有模块列表
+		List<Module> moduleList=moduleService.find("from Module", Module.class, null);
+		int size=moduleList.size();
+		//4.组织json串
+		StringBuilder sb=new StringBuilder();
+		sb.append("[");
+		for(Module module:moduleList){
+			size--;
+			sb.append("{\"id\":\"").append(module.getId());
+			sb.append("\",\"pId\":\"").append(module.getParentId());
+			sb.append("\",\"name\":\"").append(module.getName());
+			sb.append("\",\"checked\":\"");
+			if(moduleSet.contains(module)){
+				sb.append("true");
+			}else {
+				sb.append("false");
+			}
+			sb.append("\"}");
+			if(size>0)
+				sb.append(",");
+		}
+		sb.append("]");
+		
+		//5.得到response对象
+		HttpServletResponse response=ServletActionContext.getResponse();
+		response.setContentType("application/json;charset=UTF-8");
+		response.setHeader("Cache-control", "no-cache");
+		//6.使用 response对象输出json串
+		response.getWriter().write(sb.toString());
+		//7.返回NONE
+		return NONE;
+	}
+	
+	/*
+	 * 
+	 */
+	private String moduleIds;
+
+	public void setModuleIds(String moduleIds) {
+		this.moduleIds = moduleIds;
+	}
+
+	public String module() throws Exception {
+		//1.哪个角色?
+		Role role=roleService.get(Role.class, model.getId());
+		
+		//2.选中的模块有什么
+		String[] ids=moduleIds.split(",");
+		
+		//加载出这些模块列表
+		Set<Module> moduleSet=new HashSet<Module>();
+		if(ids!=null&&ids.length>0){
+			for(String id:ids){
+				//添加选中的模块在模块列表中
+				Module mo=moduleService.get(Module.class, id);
+				moduleSet.add(mo);
+			}
+		}
+		
+		//实现为角色分配新的模块
+		role.setModules(moduleSet);
+		
+		//保存结果
+		roleService.saveOrUpdate(role);
+		
+		//跳转页面
+		return "alist";
+	}
+	
 }

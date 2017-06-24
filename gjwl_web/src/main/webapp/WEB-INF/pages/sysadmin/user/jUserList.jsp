@@ -22,6 +22,8 @@
 			else
 				return false;
 	     }
+	     
+	     
 	     function toView(){
 	    	 if(isOnlyChecked()){
 	    		 formSubmit('userAction_toview','_self');
@@ -29,6 +31,8 @@
 	    		 alert("请先选择一项并且只能选择一项，再进行操作！");
 	    	 }
 	     }
+	     
+	     
 	     //实现更新
 	     function toUpdate(){
 	    	 if(isOnlyChecked()){

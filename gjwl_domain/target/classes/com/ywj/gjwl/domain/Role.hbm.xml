@@ -44,7 +44,7 @@
 		<!-- 角色与模块之间的多对多关系 -->
 		<set name="modules" table="role_module_p">
 			<key column="ROLE_ID" />
-			<many-to-many class="Module" column="MODULE_ID"/>
+			<many-to-many class="Module" column="MODULE_ID" order-by="ORDER_NO"/>
 		</set>
 		
 	</class>

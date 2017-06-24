@@ -23,12 +23,13 @@
 			}
 		};
 		
+		//只要页面一加载出来就会自动执行这个方法的
 		$(document).ready(function() {
 			$.ajax( {
 				url : "${ctx}/sysadmin/roleAction_roleModuleJsonStr.action?id=${id}",
 				type : "get",
 				dataType : "text",
-				success : initZtree
+				success : initZtree//回调方法
 			});
 		});
 		
@@ -39,10 +40,14 @@
 			zTreeObj.expandAll(true);		//展开所有树节点
 		}
 		
+		
 		//获取所有选择的节点
 		function submitCheckedNodes() {
 			var nodes = new Array();
-			nodes = zTreeObj.getCheckedNodes(true);		//取得选中的结点
+			
+			//取得选中的结点，利用ztree的api，产生的而是一个数组
+			nodes = zTreeObj.getCheckedNodes(true);		
+			
 			var str = "";
 			for (i = 0; i < nodes.length; i++) {
 				if (str != "") {
@@ -57,8 +62,11 @@
 
 <body>
 <form name="icform" method="post">
+
+		<!-- 表单提交时提交的隐藏域 -->
 	<input type="hidden" name="id" value="${id}"/>
 	<input type="hidden" id="moduleIds" name="moduleIds" value="" />
+	
 <div id="menubar">
 <div id="middleMenubar">
 <div id="innerMenubar">
@@ -96,6 +104,7 @@
 </div>
  
 </div> --%>
+
 <div>  
 	<ul id="jkTree" class="ztree"></ul>  
 </div>

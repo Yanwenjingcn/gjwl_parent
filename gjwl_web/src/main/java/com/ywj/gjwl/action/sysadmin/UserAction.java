@@ -1,15 +1,18 @@
 package com.ywj.gjwl.action.sysadmin;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.springframework.ui.Model;
 
-import com.opensymphony.xwork2.ActionContext;
+
 import com.opensymphony.xwork2.ModelDriven;
 import com.ywj.gjwl.action.BaseAction;
 import com.ywj.gjwl.domain.Dept;
+import com.ywj.gjwl.domain.Role;
 import com.ywj.gjwl.domain.User;
 import com.ywj.gjwl.service.DeptService;
+import com.ywj.gjwl.service.RoleService;
 import com.ywj.gjwl.service.UserService;
 import com.ywj.gjwl.utils.Page;
 
@@ -18,6 +21,9 @@ import com.ywj.gjwl.utils.Page;
  */
 public class UserAction extends BaseAction implements ModelDriven<User> {
 
+	/**
+	 * 
+	 */
 	// 为什么这里的取值命名为model是有学问的，具体参考day02。08
 	private User model = new User();
 
@@ -49,12 +55,17 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		this.deptService = deptService;
 	}
 
+	private RoleService roleService;
 
+	public void setRoleService(RoleService roleService) {
+		this.roleService = roleService;
+	}
 	// ==================================
 
 	/*
 	 * 分页的功能
 	 */
+
 
 	public String list() {
 		page = userService.findPage("from User", page, User.class, null);
@@ -161,4 +172,65 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		
 		return "alist";
 	}
+
+	/*
+	 * 给用户添加角色
+	 */
+	public String torole() throws Exception {
+		//查找到需要修改的用户
+		User obj=userService.get(User.class, model.getId());
+		
+		//页面上需要回显内容的，将当前用户压入值栈
+		//一个方法中，栈顶只有一次，但键值对可以有很多个
+		super.push(obj);
+		
+		//获取角色列表
+		List<Role> roleList=roleService.find("from Role ", Role.class, null);
+		//将全部角色列表加入到值栈的context中
+		super.put("roleList", roleList);
+		
+		//对象导航,
+		//提取出角色名
+		Set<Role> roleSet=obj.getRoles();
+		StringBuilder sb=new StringBuilder();
+		for(Role role:roleSet){
+			sb.append(role.getName()).append(",");
+		}
+		
+		//当前用户的角色字符串放入值栈中
+		super.put("roleStr", sb.toString());
+		
+		return "torole";
+	}
+	
+	/*
+	 *  修改用户角色操作
+	 */
+	
+	//用户对应的角色可能是多种的
+	private String[] roleIds;
+	public void setRoleIds(String[] roleIds) {
+		this.roleIds = roleIds;
+	}
+
+	public String role() throws Exception {
+		//1.查找到需要修改的用户
+		User obj=userService.get(User.class, model.getId());
+		
+		//2.有哪些角色？遍历roleIds获取修改后的角色
+		Set<Role> roles=new HashSet<Role>();
+		for(String id:roleIds){
+			Role role=roleService.get(Role.class, id);
+			roles.add(role);
+		}
+		//3.设置用户与角色列表之间的关系
+		//影响的不是user表也不是role表，而是他们的中间表
+		obj.setRoles(roles);
+		//4.保存到数据库中
+		userService.saveOrUpdate(obj);
+		//5.跳转页面
+		return "alist";
+	}
+
+
 }

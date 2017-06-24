@@ -7,8 +7,6 @@
 </head>
 
 <body>
-
-<!-- 新增所提交的表单 -->
 <form name="icform" method="post">
 
 <div id="menubar">
@@ -40,12 +38,10 @@
        		<tr>
 	            <td class="columnTitle">所在部门：</td>
 	            <td class="tableContent">
-	            
 	            	<s:select name="dept.id" list="deptList"
 	            		listKey="id" listValue="deptName"
 	            		headerKey="" headerValue="--请选择--"
 	            	></s:select>
-	            	
 	            </td>
 	        </tr>
         	<tr>

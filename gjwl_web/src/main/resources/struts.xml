@@ -11,6 +11,16 @@
 	<package name="default" namespace="/" extends="struts-default">
 
 
+		<global-results>
+		<result name="error">/WEB-INF/pages/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="error" exception="com.ywj.gjwl.exception.SysException"/>
+			<exception-mapping result="error" exception="java.lang.exception"/>
+		</global-exception-mappings>
+		
+		
+		
 		<action name="login" method="login" class="loginAction">
 			<result name="login">/WEB-INF/pages/sysadmin/login/login.jsp</result>
 			<result name="success">/WEB-INF/pages/home/fmain.jsp</result>
@@ -24,7 +34,7 @@
 			<result name="toleft">/WEB-INF/pages/${moduleName}/left.jsp</result>
 			<result name="tomain">/WEB-INF/pages/${moduleName}/main.jsp</result>
 		</action>
-		
+
 
 	</package>
 	<include file="struts2/struts-sysadmin.xml"></include>
