@@ -47,9 +47,16 @@ public class Userinfo extends BaseEntity {
 	private Integer degree;//等级
 	private String remark;//说明信息，备注
 	private Integer orderNo;//排序号
+	private String email;
 	
 	
 	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public String getId() {
 		return id;
 	}

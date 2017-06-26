@@ -5,10 +5,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+
+import com.sun.istack.FinalArrayList;
 import com.ywj.gjwl.dao.BaseDao;
 import com.ywj.gjwl.domain.User;
 import com.ywj.gjwl.service.UserService;
 import com.ywj.gjwl.utils.Encrypt;
+import com.ywj.gjwl.utils.MailUtil;
 import com.ywj.gjwl.utils.Page;
 import com.ywj.gjwl.utils.SysConstant;
 import com.ywj.gjwl.utils.UtilFuns;
@@ -20,6 +25,15 @@ public class UserServiceImpl implements UserService {
 		this.baseDao = baseDao;
 	}
 
+	private SimpleMailMessage mailMessage;
+	private JavaMailSender mailSender;
+	public void setMailMessage(SimpleMailMessage mailMessage) {
+		this.mailMessage = mailMessage;
+	}
+	public void setMailSender(JavaMailSender mailSender) {
+		this.mailSender = mailSender;
+	}
+	
 	// ====================================
 	public List<User> find(String hql, Class<User> entityClass, Object[] params) {
 		return baseDao.find(hql, entityClass, params);
@@ -36,17 +50,51 @@ public class UserServiceImpl implements UserService {
 	
 	//service的内容不是一成不变的，也是会随着我们的业务需求而不断变化，
 	//
-	public void saveOrUpdate(User entity) {
-		//用户表和用户扩展表的威一对一关系，我们让他们的id号都相同
+	public void saveOrUpdate(final User entity) {
+		//用户表和用户扩展表的为一对一关系，我们让他们的id号都相同
 		if(UtilFuns.isEmpty(entity.getId())){
 			String id=UUID.randomUUID().toString();
 			entity.setId(id);
 			entity.getUserinfo().setId(id);
-			
-			//加入shiro后的bug修复，为用户设置初始密码,这时候是需要加密的，盐是用户名
 			entity.setPassword(Encrypt.md5(SysConstant.DEFAULT_PASS, entity.getUserName()));
+			baseDao.saveOrUpdate(entity);
+			
+//			//再开启一个新的线程，完成邮件发送功能
+//			Thread thread=new Thread(new Runnable() {
+//				public void run() {
+//					try {
+//						MailUtil.sendMessage(entity.getUserinfo().getEmail(), "新员工入职账户通知", "欢迎您加入本集团，您的用户名"+entity.getUserName()+",初始密码是"+SysConstant.DEFAULT_PASS);
+//					} catch (Exception e) {
+//						
+//						e.printStackTrace();		
+//					}
+//					
+//				}
+//			});
+//			th.start();//开启线程，如果比较费时的工作都可以交给线程去做
+			
+			//用spring的邮件相关内容发送邮件
+			//我此时还没有开启163的smtp服务
+			Thread th = new Thread(new Runnable() {
+				public void run() {
+					try {
+						mailMessage.setTo(entity.getUserinfo().getEmail());
+						mailMessage.setSubject("新员工入职的系统账户通知");
+						mailMessage.setText("欢迎您加入本集团，您的用户名:"+entity.getUserName()+",初始密码："+SysConstant.DEFAULT_PASS);
+						mailSender.send(mailMessage);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
+			th.start();
+			
+			
+		}else {
+			baseDao.saveOrUpdate(entity);
 		}
-		baseDao.saveOrUpdate(entity);
+		
 
 	}
 

@@ -31,6 +31,8 @@
 
 	<bean id="userService" class="com.ywj.gjwl.service.impl.UserServiceImpl">
 		<property name="baseDao" ref="baseDao"></property>
+		<property name="mailMessage" ref="mailMessage"></property>
+		<property name="mailSender" ref="mailSender"></property>
 	</bean>
 	
 	<bean id="roleService" class="com.ywj.gjwl.service.impl.RoleServiceImpl">

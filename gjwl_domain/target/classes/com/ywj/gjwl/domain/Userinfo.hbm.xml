@@ -47,11 +47,14 @@
 		<property name="degree" column="DEGREE"></property>
 		<property name="remark" column="REMARK"></property>
 		<property name="orderNo" column="ORDER_NO"></property>
+		
+		
 		<property name="createBy" column="CREATE_BY"></property>
 		<property name="createDept" column="CREATE_DEPT"></property>
 		<property name="createTime" column="CREATE_TIME"></property>
 		<property name="updateBy" column="UPDATE_BY"></property>
 		<property name="updateTime" column="UPDATE_TIME"></property>
+		<property name="email" column="EMAIL"></property>
 		
 		<!-- 用户与部门是多对一的关系，其中用户是多的一方 -->
 		<many-to-one name="manager" column="MANAGER_ID" class="User"></many-to-one>
