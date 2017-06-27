@@ -39,4 +39,9 @@
 		scope="prototype">
 		<property name="moduleService" ref="moduleService"></property>
 	</bean>
+	
+	<bean id="contractAction" class="com.ywj.gjwl.cargo.ContractAction"
+		scope="prototype">
+		<property name="contractService" ref="contractService"></property>
+	</bean>
 </beans>

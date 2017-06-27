@@ -29,5 +29,10 @@
 		<mapping resource="com/ywj/gjwl/domain/Role.hbm.xml"></mapping>
 		<mapping resource="com/ywj/gjwl/domain/Module.hbm.xml"></mapping>
 		
+		<mapping resource="com/ywj/gjwl/domain/Contract.hbm.xml"></mapping>
+		<mapping resource="com/ywj/gjwl/domain/ContractProduct.hbm.xml"></mapping>
+		<mapping resource="com/ywj/gjwl/domain/ExtCproduct.hbm.xml"></mapping>
+		<mapping resource="com/ywj/gjwl/domain/Factory.hbm.xml"></mapping>
+		
 	</session-factory>
 	</hibernate-configuration>

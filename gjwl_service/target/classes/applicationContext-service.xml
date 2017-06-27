@@ -42,5 +42,21 @@
 	<bean id="moduleService" class="com.ywj.gjwl.service.impl.ModuleServiceImpl">
 		<property name="baseDao" ref="baseDao"></property>
 	</bean>
+	
+	<bean id="factoryService" class="com.ywj.gjwl.service.impl.FactoryServiceImpl">
+		<property name="baseDao" ref="baseDao"></property>
+	</bean>
+	
+	<bean id="contractProductService" class="com.ywj.gjwl.service.impl.ContractProductServiceImpl">
+		<property name="baseDao" ref="baseDao"></property>
+	</bean>
+	
+	<bean id="contractService" class="com.ywj.gjwl.service.impl.ContractServiceImpl">
+		<property name="baseDao" ref="baseDao"></property>
+	</bean>
+	
+	<bean id="extCproductService" class="com.ywj.gjwl.service.impl.ExtCproductServiceImpl">
+		<property name="baseDao" ref="baseDao"></property>
+	</bean>
 
 </beans>

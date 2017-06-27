@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+
+	<!-- struts的包名是唯一的， -->
+	<!-- 这里extends继承的是struts.xml中的内容，应该就和java中的继承差不多的吧 -->
+	<package name="cargo" namespace="/cargo" extends="default">
+	
+	<!-- 这个里面的class的内容是spring中id的值 -->
+		<action name="contractAction_*" class="contractAction" method="{1}">
+			<result name="list">/WEB-INF/pages/cargo/contract/jContractList.jsp</result>
+			<result name="toview">/WEB-INF/pages/cargo/contract/jContractView.jsp</result>
+			<result name="tocreate">/WEB-INF/pages/cargo/contract/jContractCreate.jsp</result>
+			<!-- 重定向到Action,这么写 ,并且这些页面跳转是可以重用的-->
+			<result name="alist" type="redirectAction">contractAction_list</result>
+			<result name="toupdate">/WEB-INF/pages/cargo/contract/jContractUpdate.jsp</result>
+			
+		</action>
+
+
+
+
+	</package>
+
+
+</struts>
+	
