@@ -14,10 +14,9 @@ import com.ywj.gjwl.utils.Page;
 
 
 /**
- * @Description:
- * @Author:		传智播客 java学院	传智.宋江
- * @Company:	http://java.itcast.cn
- * @CreateDate:	2014年10月31日
+ * 
+ * @author ywj
+ *
  */
 public class BaseDaoImpl implements BaseDao{
 	private SessionFactory sessionFactory;
@@ -28,9 +27,10 @@ public class BaseDaoImpl implements BaseDao{
 		return sessionFactory.getCurrentSession();
 	}
 
-	//带条件查询
+	//带条件查询,其中的参数是以数组的形式给出
 	public <T> List<T> find(String hql, Class<T> entityClass, Object[] params) {
 		Query query = this.getSession().createQuery(hql);
+		//如果参数不为空
 		if(params!=null){
 			for (int i = 0; i < params.length; i++) {
 				query.setParameter(i, params[i]);
@@ -66,12 +66,17 @@ public class BaseDaoImpl implements BaseDao{
 		return page;
 	}
 	
-	//新增和修改，hibernate根据id是否为null自动判断
+	/**
+	 * 新增和修改，hibernate根据id是否为null自动判断
+	 * 如果是null则是新增，否则为修改
+	 */
 	public <T> void saveOrUpdate(T entity) {
 		this.getSession().saveOrUpdate(entity);
 	}
 	
-	//集合保存，这时新增还是修改，就自动判断，调用时是否简洁。适合批量新增和修改时。（Mrecord控件）
+	/**
+	 * 集合保存，这时新增还是修改，就自动判断，调用时是否简洁。适合批量新增和修改时。（Mrecord控件）
+	 */
 	public <T> void saveOrUpdateAll(Collection<T> entitys){
 		for(T entity : entitys){
 			this.saveOrUpdate(entity);//为什么hibernate批量操作时，要用循环一条一条记录去更新？
@@ -83,7 +88,9 @@ public class BaseDaoImpl implements BaseDao{
 		this.getSession().delete(get(entityClass, id));
 	}
 
-	//批量删除
+	/**
+	 * 批量删除,从jsp中传入struts2的多个同名框的内容是以“， ”分隔
+	 */
 	public <T> void delete(Class<T> entityClass, Serializable[] ids) {
 		for(Serializable s : ids){
 			deleteById(entityClass, s);

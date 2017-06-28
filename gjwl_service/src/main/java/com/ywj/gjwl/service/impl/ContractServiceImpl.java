@@ -70,4 +70,13 @@ public class ContractServiceImpl implements ContractService {
 		//baseDao.delete(entityClass, ids);
 	}
 
+	
+	public void changeState(String[] ids, Integer state) {
+		for(String id:ids){
+			Contract contract=baseDao.get(Contract.class, id);
+			contract.setState(state);
+			baseDao.saveOrUpdate(contract);//可以不写,和一级缓存相关
+		}
+	}
+
 }

@@ -23,12 +23,15 @@ import com.ywj.gjwl.service.ModuleService;
 import com.ywj.gjwl.service.RoleService;
 import com.ywj.gjwl.utils.Page;
 
-/*
- * 部门管理的Action
+/**
+ * 
+ * @ClassName: RoleAction
+ * @Description: 角色管理Action
+ * @author YWJ
+ * @date 2017年6月28日 下午4:53:57
  */
 public class RoleAction extends BaseAction implements ModelDriven<Role> {
 
-	// 为什么这里的取值命名为model是有学问的，具体参考day02。08
 	private Role model = new Role();
 
 	public Role getModel() {
@@ -37,31 +40,32 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 
 	// 分页查询
 	private Page page = new Page();
+
 	public Page getPage() {
 		return page;
 	}
+
 	public void setPage(Page page) {
 		this.page = page;
 	}
 
-	// 注入service
+	// 注入角色service
 	private RoleService roleService;
+
 	public void setRoleService(RoleService roleService) {
 		this.roleService = roleService;
 	}
-	
 
+	// 注入模块service
 	private ModuleService moduleService;
 	public void setModuleService(ModuleService moduleService) {
 		this.moduleService = moduleService;
 	}
-	// ==================================
+	// ===============================================================
 
 	/*
 	 * 分页的功能
 	 */
-
-
 	public String list() {
 		page = roleService.findPage("from Role", page, Role.class, null);
 		// 设置分页的url
@@ -75,9 +79,7 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 	/*
 	 * 查看
 	 */
-	public String toview() throws Exception{
-		// 1.调用业务方法，根据id，得到对象
-		// 这种查看某项的具体内容的东西，都会从前台传送一个id号过来，这个id号也是可以被model直接接受的。
+	public String toview() throws Exception {
 		try {
 			Role role = roleService.get(Role.class, model.getId());
 			super.push(role);
@@ -94,21 +96,11 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 	public String tocreate() {
 		return "tocreate";
 	}
-	
 
-	/*
-	 * //获取要插入的数据 <s:select name="parent.id" list="#RoleList" headerKey=""
-	 * headerValue="--请选择--" listKey="id" listValue="RoleName"></s:select>
-	 * model对象能接收： parent id RoleName
-	 */
 	public String insert() {
 
-		// 插入数据库,这个函数是可以做两件事情的，要么就是save要么就是update。
-		// 当传入的数据没有oid的时候就是做save否则就是update
 		roleService.saveOrUpdate(model);
 
-		// 返回新的页面，此时一般插入新的数据后一般再跳转到列表页面，
-		// 重定向
 		return "alist";
 	}
 
@@ -119,7 +111,7 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 		// 获取原本已经存在的Role对象
 		Role role = roleService.get(Role.class, model.getId());
 		// 将对象压入值栈
-		super.push(role);	
+		super.push(role);
 		// 跳转到更新页面
 		return "toupdate";
 	}
@@ -129,100 +121,94 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 	 */
 	public String update() {
 
-		// 傻逼了，不能直接这么弄，因为原本年数据库里面是有值的，
-		//但是直接更新的话，原来的值就没有了，得先把以前的值取出来。
-		Role obj =roleService.get(Role.class, model.getId());
+
+		Role obj = roleService.get(Role.class, model.getId());
 		// 设置修改了的值
 		obj.setName(model.getName());
 		obj.setRemark(model.getRemark());
-   
+
 		// 将模型接收到的数据保存至数据库
 		roleService.saveOrUpdate(obj);
 		// 返回页面
 		return "alist";
 	}
-	
+
 	/*
-	 * 实现批量删除
-	 * 同名复选框的的id取值有讲究
+	 * 实现批量删除 同名复选框的的id取值有讲究
 	 */
-	
+
 	public String delete() throws Exception {
-		//接收id数组然后分割
-		String[] ids=model.getId().split(", ");
-		//调用业务层实现批量删除
+		// 接收id数组然后分割
+		String[] ids = model.getId().split(", ");
+		// 调用业务层实现批量删除
 		roleService.delete(Role.class, ids);
-		
 		return "alist";
 	}
+
 	
-	
-	
-/*
- * 权限管理
- */
+	/*
+	 * 权限管理
+	 */
 	public String tomodule() throws Exception {
-		//1.根据角色id，得到角色的对象
-		Role obj=roleService.get(Role.class, model.getId());
-		//2.将结果压入值栈
+		// 1.根据角色id，得到角色的对象
+		Role obj = roleService.get(Role.class, model.getId());
+		// 2.将结果压入值栈
 		super.push(obj);
-		
+
 		return "tomodule";
 	}
-	
-	
-	
+
 	/**
-	 * 为了使用 zTree树，就要组织好zTree树所使用的json数据
-	 * json数据结构如下：
-	 * [{"id":"模块的id","pId":"父模块id","name":"模块名","checked":"true|false"},{"id":"模块的id","pId":"父模块id","name":"模块名","checked":"true|false"}]
+	 * 为了使用 zTree树，就要组织好zTree树所使用的json数据 json数据结构如下：
+	 * [{"id":"模块的id","pId":"父模块id","name":"模块名","checked":"true|false"},{"id":
+	 * "模块的id","pId":"父模块id","name":"模块名","checked":"true|false"}]
 	 * 
-	 * 常用的json插件有哪些？
-	 * json-lib    fastjson     struts-json-plugin-xxx.jar,手动拼接
+	 * 常用的json插件有哪些？ json-lib fastjson struts-json-plugin-xxx.jar,手动拼接
 	 * 
-	 * 如何输出?
-	 * 借助于response对象输出数据
+	 * 如何输出? 借助于response对象输出数据
 	 */
-	
+
 	public String roleModuleJsonStr() throws Exception {
-		//1.获取当前用户的角色信息
-		Role role=roleService.get(Role.class, model.getId());
-		//2.通过对象导航的方式加载出当前的模块列表
-		Set<Module> moduleSet=role.getModules();
-		
-		//3.加载出所有模块列表
-		List<Module> moduleList=moduleService.find("from Module", Module.class, null);
-		int size=moduleList.size();
-		//4.组织json串
-		StringBuilder sb=new StringBuilder();
+		// 1.获取当前用户的角色信息
+		Role role = roleService.get(Role.class, model.getId());
+		// 2.通过对象导航的方式加载出当前的模块列表
+		Set<Module> moduleSet = role.getModules();
+
+		// 3.加载出所有模块列表
+		List<Module> moduleList = moduleService.find("from Module", Module.class, null);
+		int size = moduleList.size();
+		// 4.组织json串
+		StringBuilder sb = new StringBuilder();
 		sb.append("[");
-		for(Module module:moduleList){
+		for (Module module : moduleList) {
 			size--;
 			sb.append("{\"id\":\"").append(module.getId());
 			sb.append("\",\"pId\":\"").append(module.getParentId());
 			sb.append("\",\"name\":\"").append(module.getName());
 			sb.append("\",\"checked\":\"");
-			if(moduleSet.contains(module)){
+			if (moduleSet.contains(module)) {
 				sb.append("true");
-			}else {
+			} else {
 				sb.append("false");
 			}
 			sb.append("\"}");
-			if(size>0)
+			if (size > 0)
 				sb.append(",");
 		}
 		sb.append("]");
-		
-		//5.得到response对象
-		HttpServletResponse response=ServletActionContext.getResponse();
+
+		// 5.得到response对象
+		HttpServletResponse response = ServletActionContext.getResponse();
 		response.setContentType("application/json;charset=UTF-8");
 		response.setHeader("Cache-control", "no-cache");
-		//6.使用 response对象输出json串
+		
+		// 6.使用 response对象输出json串
 		response.getWriter().write(sb.toString());
-		//7.返回NONE
+		
+		// 7.返回NONE
 		return NONE;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -233,30 +219,30 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 	}
 
 	public String module() throws Exception {
-		//1.哪个角色?
-		Role role=roleService.get(Role.class, model.getId());
-		
-		//2.选中的模块有什么
-		String[] ids=moduleIds.split(",");
-		
-		//加载出这些模块列表
-		Set<Module> moduleSet=new HashSet<Module>();
-		if(ids!=null&&ids.length>0){
-			for(String id:ids){
-				//添加选中的模块在模块列表中
-				Module mo=moduleService.get(Module.class, id);
+		// 1.哪个角色?
+		Role role = roleService.get(Role.class, model.getId());
+
+		// 2.选中的模块有什么
+		String[] ids = moduleIds.split(",");
+
+		// 加载出这些模块列表
+		Set<Module> moduleSet = new HashSet<Module>();
+		if (ids != null && ids.length > 0) {
+			for (String id : ids) {
+				// 添加选中的模块在模块列表中
+				Module mo = moduleService.get(Module.class, id);
 				moduleSet.add(mo);
 			}
 		}
-		
-		//实现为角色分配新的模块
+
+		// 实现为角色分配新的模块
 		role.setModules(moduleSet);
-		
-		//保存结果
+
+		// 保存结果
 		roleService.saveOrUpdate(role);
-		
-		//跳转页面
+
+		// 跳转页面
 		return "alist";
 	}
-	
+
 }

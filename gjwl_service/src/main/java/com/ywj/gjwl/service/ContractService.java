@@ -25,5 +25,8 @@ public interface ContractService {
 		public void deleteById(Class<Contract> entityClass, Serializable id);
 		//批量删除
 		public void delete(Class<Contract> entityClass, Serializable[] ids);
+		
+		//修改状态
+		public void changeState(String[] ids,Integer state);
 
 }

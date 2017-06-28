@@ -5,19 +5,8 @@
 
     
     <hibernate-mapping package="com.ywj.gjwl.domain">
-	<class name="Role" table="role_p">
+	<class name="Role" table="role_p">   
 	
-	<!-- ROLE_ID              VARCHAR(40) not null,
-   NAME                 VARCHAR(30),
-   REMARK               VARCHAR(200),
-   ORDER_NO             INT,
-   
-   CREATE_BY            VARCHAR(40),
-   CREATE_DEPT          VARCHAR(40),
-   CREATE_TIME          TIMESTAMP,
-   UPDATE_BY            VARCHAR(40),
-   UPDATE_TIME          TIMESTAMP, 
-   -->
 		<id name="id" column="ROLE_ID">
 			<generator class="uuid"></generator>
 		</id>

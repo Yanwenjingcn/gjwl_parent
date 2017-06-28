@@ -12,9 +12,6 @@
 	http://www.springframework.org/schema/context    
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<!--1.DataSource C3P0 -->
-
-
 	<!-- 基础配置内容 -->
 	<bean id="baseDao" class="com.ywj.gjwl.dao.impl.BaseDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>

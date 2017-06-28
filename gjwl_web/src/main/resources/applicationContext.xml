@@ -32,15 +32,16 @@
 	<!-- 2.sessionFactory-->
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
+		<!-- hibernate的配置文件内容 -->
 		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
 	</bean>
 
-	
-	
 	<!--Shiro安全框架产生代理子类的方式： 使用cglib方式         放在事务管理器之前配置-->
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	
 	<!-- 3.事务管理器-->
+	
+	
 	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>

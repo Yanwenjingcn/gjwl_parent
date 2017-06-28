@@ -9,13 +9,11 @@ import com.ywj.gjwl.service.ModuleService;
 import com.ywj.gjwl.utils.Page;
 
 /*
- * 部门管理的Action
+ * 模块管理的Action
  */
 public class ModuleAction extends BaseAction implements ModelDriven<Module> {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -5926529455563735633L;
 	// 为什么这里的取值命名为model是有学问的，具体参考day02。08
 	private Module model = new Module();
@@ -35,14 +33,14 @@ public class ModuleAction extends BaseAction implements ModelDriven<Module> {
 		this.page = page;
 	}
 
-	// 注入service
+	// 注入模块的service
 	private ModuleService moduleService;
 
 	public void setModuleService(ModuleService moduleService) {
 		this.moduleService = moduleService;
 	}
 
-	// ==================================
+	// ==================================================
 
 	/*
 	 * 分页的功能
@@ -62,8 +60,6 @@ public class ModuleAction extends BaseAction implements ModelDriven<Module> {
 	 * 查看
 	 */
 	public String toview() {
-		// 1.调用业务方法，根据id，得到对象
-		// 这种查看某项的具体内容的东西，都会从前台传送一个id号过来，这个id号也是可以被model直接接受的。
 		Module role = moduleService.get(Module.class, model.getId());
 		super.push(role);
 		return "toview";
@@ -76,19 +72,13 @@ public class ModuleAction extends BaseAction implements ModelDriven<Module> {
 		return "tocreate";
 	}
 
-	/*
-	 * //获取要插入的数据 <s:select name="parent.id" list="#RoleList" headerKey=""
-	 * headerValue="--请选择--" listKey="id" listValue="RoleName"></s:select>
-	 * model对象能接收： parent id RoleName
-	 */
+	
 	public String insert() {
 
-		// 插入数据库,这个函数是可以做两件事情的，要么就是save要么就是update。
-		// 当传入的数据没有oid的时候就是做save否则就是update
+		
 		moduleService.saveOrUpdate(model);
 
-		// 返回新的页面，此时一般插入新的数据后一般再跳转到列表页面，
-		// 重定向
+	
 		return "alist";
 	}
 
@@ -109,8 +99,6 @@ public class ModuleAction extends BaseAction implements ModelDriven<Module> {
 	 */
 	public String update() {
 
-		// 傻逼了，不能直接这么弄，因为原本年数据库里面是有值的，
-		// 但是直接更新的话，原来的值就没有了，得先把以前的值取出来。
 		Module obj = moduleService.get(Module.class, model.getId());
 		// 设置修改了的值
 		obj.setName(model.getName());

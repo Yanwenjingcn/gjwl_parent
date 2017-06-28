@@ -5,6 +5,7 @@
 
 <hibernate-mapping package="com.ywj.gjwl.domain">
 	<class name="Dept" table="dept_p">
+	
 		<id name="id" column="DEPT_ID">
 			<generator class="uuid"></generator>
 		</id>

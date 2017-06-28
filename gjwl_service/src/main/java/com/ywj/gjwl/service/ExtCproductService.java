@@ -25,5 +25,12 @@ public interface ExtCproductService {
 		public void deleteById(Class<ExtCproduct> entityClass, Serializable id);
 		//批量删除
 		public void delete(Class<ExtCproduct> entityClass, Serializable[] ids);
+		
+		/**
+		 * 删除指定的附件对象
+		 * @param entityClass
+		 * @param model
+		 */
+		public void delete(Class<ExtCproduct> entityClass, ExtCproduct model);
 
 }

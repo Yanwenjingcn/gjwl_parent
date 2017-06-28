@@ -4,9 +4,11 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.ywj.gjwl.domain">
 	<class name="Contract" table="contract_c">
+	
 		<id name="id" column="CONTRACT_ID">
 			<generator class="uuid"/>
 		</id>
+		
 		<property name="offeror" column="OFFEROR"/>
 		<property name="contractNo" column="CONTRACT_NO"/>
 		<property name="signingDate" column="SIGNING_DATE"/>
@@ -37,5 +39,6 @@
 			<key column="CONTRACT_ID"></key>
 			<one-to-many class="ContractProduct"/>
 		</set>
+		
 	</class>
 </hibernate-mapping>    

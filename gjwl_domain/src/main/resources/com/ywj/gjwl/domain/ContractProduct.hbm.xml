@@ -26,13 +26,15 @@
 		<!-- 货物和合同，多对一 -->
 		<many-to-one name="contract" class="Contract" column="CONTRACT_ID"/>
 		
-		<!-- 货物和厂家，多对一 -->
+		<!-- 货物和厂家，多对一     一个厂家生产多种货物 -->
 		<many-to-one name="factory" class="Factory" column="FACTORY_ID"/>
 		
-		<!-- 货物和附件关联，一对多 -->
+		<!-- 货物和附件关联，一对多 一个货物下有多种附件      控制反转，多方维护关系-->
 		<set name="extCproducts" cascade="all" inverse="true">
 			<key column="CONTRACT_PRODUCT_ID"/>
 			<one-to-many class="ExtCproduct"/>
 		</set>
+		
+		
 	</class>
 </hibernate-mapping>    

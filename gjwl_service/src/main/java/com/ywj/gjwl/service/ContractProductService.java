@@ -26,4 +26,6 @@ public interface ContractProductService {
 		//批量删除
 		public void delete(Class<ContractProduct> entityClass, Serializable[] ids);
 
+		//删除置顶的货物对象
+		public void delete(Class<ContractProduct> entityClass, ContractProduct model);
 }

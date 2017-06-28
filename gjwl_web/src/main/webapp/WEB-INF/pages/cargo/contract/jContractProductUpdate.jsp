@@ -45,6 +45,8 @@
 	            				onchange="setFactoryName(this.options[this.selectedIndex].text);"
 	            				listKey="id" listValue="factoryName" 
 	            				headerKey="" headerValue="--请选择--"/>
+	            				
+	            				<!-- 隐藏域传递工厂名 -->
 	            	<input type="hidden" id="factoryName" name="factoryName" value="${factoryName }"/>
 	            </td>
 	            <td class="columnTitle">货号：</td>
@@ -57,6 +59,7 @@
 	        <tr>
 	            <td class="columnTitle">数量：</td>
 	            <td class="tableContent"><input type="text" name="cnumber" value="${cnumber }"/>  
+	                <!-- 隐藏域传递货物金额 -->
 	                <input type="hidden" name="amount" value="${amount }"/>
 	            </td>
 	            <td class="columnTitle">包装单位：</td>

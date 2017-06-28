@@ -2,8 +2,6 @@ package com.ywj.gjwl.action.sysadmin;
 
 import java.util.List;
 
-import org.springframework.ui.Model;
-
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
 import com.ywj.gjwl.action.BaseAction;
@@ -34,7 +32,7 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept> {
 		this.page = page;
 	}
 
-	// 注入service
+	// 注入部门service
 	private DeptService deptService;
 
 	public void setDeptService(DeptService deptService) {
@@ -42,9 +40,8 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept> {
 	}
 
 	// ==================================
-
-	/*
-	 * 分页的功能
+/**
+ *  分页的功能
 	 */
 
 	public String list() {
@@ -62,7 +59,7 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept> {
 	 */
 	public String toview() {
 		// 1.调用业务方法，根据id，得到对象
-		// 这种查看某项的具体内容的东西，都会从前台传送一个id号过来，这个id号也是可以被model直接接受的。
+		// 这种查看某项的具体内容的东西，都会从前台传送一个id号（隐藏的内容）过来，这个id号也是可以被model直接接受的。
 		Dept dept = deptService.get(Dept.class, model.getId());
 		super.push(dept);
 		return "toview";
@@ -72,7 +69,6 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept> {
 	 * 进入新增页面
 	 */
 	public String tocreate() {
-
 		// 调用业务方法查询父部门集合
 		List<Dept> deptsList = deptService.find("from Dept where state=1", Dept.class, null);
 		// 将结果压入值栈中
@@ -82,7 +78,7 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept> {
 	
 
 	/*
-	 * //获取要插入的数据 <s:select name="parent.id" list="#deptList" headerKey=""
+	 * 获取要插入的数据 <s:select name="parent.id" list="#deptList" headerKey=""
 	 * headerValue="--请选择--" listKey="id" listValue="deptName"></s:select>
 	 * model对象能接收： parent id deptName
 	 */
@@ -108,19 +104,20 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept> {
 
 		// 获取所有部门名称，也就是那个列表
 		List<Dept> deptList = deptService.find("from Dept where state=1", Dept.class, null);
+		//自己不能是自己的父部门
 		deptList.remove(dept);
 		super.put("deptList", deptList);
-
 		// 跳转到更新页面
 		return "toupdate";
 	}
+	
 
 	/*
 	 * 将更新的内容保存至数据库中 返回至列表页面
 	 */
 	public String update() {
 
-		// 傻逼了，不能直接这么弄，因为原本年数据库里面是有值的，但是直接更新的话，原来的值就没有了，得先把以前的值取出来。
+		//不能直接保存，因为原本年数据库里面是有值的，直接更新的话，原来的值就没有了，得先把以前的值取出来。
 		Dept obj = deptService.get(Dept.class, model.getId());
 
 		// 设置修改了的值
@@ -129,14 +126,13 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept> {
 
 		// 将模型接收到的数据保存至数据库
 		deptService.saveOrUpdate(obj);
-
 		// 返回页面
 		return "alist";
 	}
 	
 	/*
 	 * 实现批量删除
-	 * 同名复选框的的id取值有讲究
+	 * 一批同名复选框的的id取值有讲究
 	 */
 	
 	public String delete() throws Exception {
@@ -144,7 +140,6 @@ public class DeptAction extends BaseAction implements ModelDriven<Dept> {
 		String[] ids=model.getId().split(", ");
 		//调用业务层实现批量删除
 		deptService.delete(Dept.class, ids);
-		
 		return "alist";
 	}
 }

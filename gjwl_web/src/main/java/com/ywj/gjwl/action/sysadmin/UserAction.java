@@ -24,7 +24,6 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 	/**
 	 * 
 	 */
-	// 为什么这里的取值命名为model是有学问的，具体参考day02。08
 	private User model = new User();
 
 	public User getModel() {
@@ -42,31 +41,33 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		this.page = page;
 	}
 
-	// 注入service
+	// 注入用户service
 	private UserService userService;
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 	
 	
-	//要提取其它表的内容，就要注入其它的表对应的service，不要忘了spring中的配置
+	/**
+	 * 要提取其它表的内容，就要注入其它的表对应的service，不要忘了spring中的配置
+	 */
 	private DeptService deptService;
 	public void setDeptService(DeptService deptService) {
 		this.deptService = deptService;
 	}
 
+	/**
+	 * 注入角色的service
+	 */
 	private RoleService roleService;
-
 	public void setRoleService(RoleService roleService) {
 		this.roleService = roleService;
 	}
-	// ==================================
+	// ==========================================================
 
 	/*
 	 * 分页的功能
 	 */
-
-
 	public String list() {
 		page = userService.findPage("from User", page, User.class, null);
 		// 设置分页的url
@@ -92,7 +93,6 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 	 * 进入新增页面
 	 */
 	public String tocreate() {
-		
 		List<Dept> deptList =deptService.find("from Dept where state=1", Dept.class, null);
 		super.put("deptList", deptList);
 		// 调用业务方法查询父部门集合
@@ -102,20 +102,17 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		return "tocreate";
 	}
 	
-
-	/*
-	 * //获取要插入的数据 <s:select name="parent.id" list="#UserList" headerKey=""
-	 * headerValue="--请选择--" listKey="id" listValue="UserName"></s:select>
-	 * model对象能接收： parent id UserName
-	 */
+/**
+ * 
+* @Title: insert 
+* @Description: 新增用户，保存入数据库
+* @param @return    
+* @return String    
+* @throws
+ */
 	public String insert() {
-
-		// 插入数据库,这个函数是可以做两件事情的，要么就是save要么就是update。
-		// 当传入的数据没有oid的时候就是做save否则就是update
 		userService.saveOrUpdate(model);
 
-		// 返回新的页面，此时一般插入新的数据后一般再跳转到列表页面，
-		// 重定向
 		return "alist";
 	}
 
@@ -130,7 +127,6 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 
 		// 获取所有部门名称，也就是那个列表
 		List<Dept> deptList = deptService.find("from Dept where state=1", Dept.class, null);
-		//deptList.remove(user);
 		super.put("deptList", deptList);
 
 		// 跳转到更新页面
@@ -142,8 +138,6 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 	 */
 	public String update() {
 
-		// 傻逼了，不能直接这么弄，因为原本年数据库里面是有值的，
-		//但是直接更新的话，原来的值就没有了，得先把以前的值取出来。
 		User obj = userService.get(User.class, model.getId());
 
 		// 设置修改了的值
@@ -172,9 +166,16 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		
 		return "alist";
 	}
+	
 
-	/*
-	 * 给用户添加角色
+	/**
+	 * 
+	* @Title: torole 
+	* @Description: 进入为用户设置角色的页面，其中有一些需要回显的内容
+	* @param @return
+	* @param @throws Exception    
+	* @return String    
+	* @throws
 	 */
 	public String torole() throws Exception {
 		//查找到需要修改的用户
@@ -184,13 +185,12 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		//一个方法中，栈顶只有一次，但键值对可以有很多个
 		super.push(obj);
 		
-		//获取角色列表
+		//获取所有角色列表
 		List<Role> roleList=roleService.find("from Role ", Role.class, null);
 		//将全部角色列表加入到值栈的context中
 		super.put("roleList", roleList);
 		
-		//对象导航,
-		//提取出角色名
+		//对象导航,提取出角色名
 		Set<Role> roleSet=obj.getRoles();
 		StringBuilder sb=new StringBuilder();
 		for(Role role:roleSet){
@@ -203,10 +203,9 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		return "torole";
 	}
 	
-	/*
-	 *  修改用户角色操作
-	 */
-	
+/**
+ *修改用户角色并保存至数据库
+ */
 	//用户对应的角色可能是多种的
 	private String[] roleIds;
 	public void setRoleIds(String[] roleIds) {
@@ -223,11 +222,14 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 			Role role=roleService.get(Role.class, id);
 			roles.add(role);
 		}
+		
 		//3.设置用户与角色列表之间的关系
 		//影响的不是user表也不是role表，而是他们的中间表
 		obj.setRoles(roles);
+		
 		//4.保存到数据库中
 		userService.saveOrUpdate(obj);
+		
 		//5.跳转页面
 		return "alist";
 	}

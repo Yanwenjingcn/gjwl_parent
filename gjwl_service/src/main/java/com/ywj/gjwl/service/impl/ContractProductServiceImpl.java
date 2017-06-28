@@ -3,10 +3,13 @@ package com.ywj.gjwl.service.impl;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.ywj.gjwl.dao.BaseDao;
+import com.ywj.gjwl.domain.Contract;
 import com.ywj.gjwl.domain.ContractProduct;
+import com.ywj.gjwl.domain.ExtCproduct;
 import com.ywj.gjwl.service.ContractProductService;
 import com.ywj.gjwl.service.ModuleService;
 
@@ -34,12 +37,37 @@ public class ContractProductServiceImpl implements ContractProductService {
 	}
 
 	
-	//service的内容不是一成不变的，也是会随着我们的业务需求而不断变化，
-	//
+	
 	public void saveOrUpdate(ContractProduct entity) {
-		//用户表和用户扩展表的威一对一关系，我们让他们的id号都相同
-		if(UtilFuns.isEmpty(entity.getId())){		
+		Double amount=0d;
+		//
+		if(UtilFuns.isEmpty(entity.getId())){
+			
+			if(UtilFuns.isNotEmpty(entity.getPrice())&&UtilFuns.isNotEmpty(entity.getCnumber())){		
+				amount=entity.getPrice()*entity.getCnumber();//货物总金额
+				//冗余字段
+				entity.setAmount(amount);
+			}
+			
+			Contract contract=baseDao.get(Contract.class, entity.getContract().getId());
+			contract.setTotalAmount(contract.getTotalAmount()+amount);
+			
+			//保存购销合同的总金额
+			baseDao.saveOrUpdate(contract);
+		}else{
+			//去除货物的原有的总金额
+			double oldAmount=entity.getAmount();
+			if(UtilFuns.isNotEmpty(entity.getPrice())&&UtilFuns.isNotEmpty(entity.getCnumber())){		
+				amount=entity.getPrice()*entity.getCnumber();//货物总金额
+				//冗余字段
+				entity.setAmount(amount);
+			}
+			
+			Contract contract=baseDao.get(Contract.class, entity.getContract().getId());
+			contract.setTotalAmount(contract.getTotalAmount()-oldAmount+amount);
+			baseDao.saveOrUpdate(contract);
 		}
+		
 		baseDao.saveOrUpdate(entity);
 
 	}
@@ -66,6 +94,34 @@ public class ContractProductServiceImpl implements ContractProductService {
 			this.deleteById(ContractProduct.class, id);
 		}
 		//baseDao.delete(entityClass, ids);
+	}
+
+	/**
+	 * 删除某购销合同下的货物，主要是操作金额
+	 */
+	public void delete(Class<ContractProduct> entityClass, ContractProduct model) {
+		//1.获取货物对象
+		ContractProduct cp=baseDao.get(ContractProduct.class, model.getId());
+		
+		//2.获取货物下附件内容
+		Set<ExtCproduct> extcSet=cp.getExtCproducts();
+		
+		//3.获取购销合同。删除时依旧要修改购销合同的总金额
+		Contract contract=baseDao.get(Contract.class, model.getContract().getId());
+		
+		//4.修改总金额，减去附件的金额
+		for(ExtCproduct ext:extcSet){
+			contract.setTotalAmount(contract.getTotalAmount()-ext.getAmount());
+		}
+		
+		//5.修改总金额。减去货物的金额
+		contract.setTotalAmount(contract.getTotalAmount()-cp.getAmount());
+		
+		//6.跟新购销合同的总金额
+		baseDao.saveOrUpdate(contract);
+		
+		//7.删除货物对象 级联删除附件
+		baseDao.deleteById(ContractProduct.class, model.getId());
 	}
 
 }

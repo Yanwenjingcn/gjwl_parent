@@ -5,10 +5,9 @@ import java.util.Date;
 import java.util.Set;
 
 /**
- * @Description:
- * @Author:		传智播客 java学院	传智宋江
- * @Company:	http://java.itcast.cn
- * @CreateDate:	2015年1月8日
+ * 
+ * @author ywj
+ *
  */
 public class Contract extends BaseEntity implements Serializable {
 	private Set<ContractProduct> contractProducts;		//合同和货物，一对多
@@ -32,6 +31,8 @@ public class Contract extends BaseEntity implements Serializable {
 	private String printStyle;		//打印板式，1打印一个货物2打印两个货物
 	private String remark;			//备注
 	private Integer state;			//状态：0草稿 1已上报待报运
+	
+	
 	public String getId() {
 		return id;
 	}

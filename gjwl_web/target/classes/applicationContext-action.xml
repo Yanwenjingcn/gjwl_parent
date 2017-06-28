@@ -44,4 +44,16 @@
 		scope="prototype">
 		<property name="contractService" ref="contractService"></property>
 	</bean>
+	
+	<bean id="contractProductAction" class="com.ywj.gjwl.cargo.ContractProductAction"
+		scope="prototype">
+		<property name="contractProductService" ref="contractProductService"></property>
+		<property name="factoryService" ref="factoryService"></property>
+	</bean>
+	
+	<bean id="extCproductAction" class="com.ywj.gjwl.cargo.ExtCproductAction"
+		scope="prototype">
+		<property name="factoryService" ref="factoryService"></property>
+		<property name="extCproductService" ref="extCproductService"></property>
+	</bean>
 </beans>

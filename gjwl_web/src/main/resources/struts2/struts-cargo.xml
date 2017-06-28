@@ -20,7 +20,17 @@
 			<!-- 重定向到Action,这么写 ,并且这些页面跳转是可以重用的-->
 			<result name="alist" type="redirectAction">contractAction_list</result>
 			<result name="toupdate">/WEB-INF/pages/cargo/contract/jContractUpdate.jsp</result>
+		</action>
+		
+		<action name="contractProductAction_*" class="contractProductAction" method="{1}">
+			<result name="tocreate">/WEB-INF/pages/cargo/contract/jContractProductCreate.jsp</result>
+			<result name="toupdate">/WEB-INF/pages/cargo/contract/jContractProductUpdate.jsp</result>
 			
+		</action>
+		
+		<action name="extCproductAction_*" class="extCproductAction" method="{1}">
+			<result name="tocreate">/WEB-INF/pages/cargo/contract/jExtCproductCreate.jsp</result>
+			<result name="toupdate">/WEB-INF/pages/cargo/contract/jExtCproductUpdate.jsp</result>
 		</action>
 
 

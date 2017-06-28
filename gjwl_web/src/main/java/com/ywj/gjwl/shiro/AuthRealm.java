@@ -25,7 +25,9 @@ public class AuthRealm extends AuthorizingRealm{
 		this.userService = userService;
 	}
 	
-	//授权   当jsp页面出现Shiro标签时，就会执行授权方法
+	/**
+	 * 授权   当jsp页面出现Shiro标签时，就会执行授权方法
+	 */
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection pc) {
 		System.out.println("授权");
 		//所需授权的用户
@@ -47,22 +49,26 @@ public class AuthRealm extends AuthorizingRealm{
 		return info;
 	}
 
-	//认证方法 token代表用户在界面输入的用户名和密码
-	//我认为它的主要作用就是从数据库中提取值，用于后续密码比较
+	
+	/**
+	 * 认证方法，先进入认证方法
+	 * 认证方法 token代表用户在界面输入的用户名和密码
+		我认为它的主要作用就是从数据库中提取值，用于后续密码比较
+	 */
+	
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		System.out.println("认证");
 		
 		//1.向下转型
 		UsernamePasswordToken upToken  = (UsernamePasswordToken) token;
 		
-		//2.调用业务方法，实现根据用户名查询
+		//2.调用业务方法，实现根据用户名查询获取数据库中的用户信息用于后续比较
 		String hql = "from User where userName=?";
 		List<User> list = userService.find(hql, User.class, new String[]{upToken.getUsername()});
 		if(list!=null && list.size()>0){
 			User user = list.get(0);
 			AuthenticationInfo info = new SimpleAuthenticationInfo(user,user.getPassword(),this.getName());
-			return info;   //此处如果返回，就会立即进入到密码比较器
-			
+			return info;   //此处如果返回，就会立即进入到密码比较器CustomCredentialsMatcher
 		}
 		
 		return null;//就会出现异常

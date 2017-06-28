@@ -7,7 +7,7 @@ public class SysException extends Exception {
 	public SysException(String message) {
 		this.message=message;
 	}
-
+	
 	public String getMessage() {
 		return message;
 	}

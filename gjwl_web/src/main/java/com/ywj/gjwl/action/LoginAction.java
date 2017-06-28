@@ -1,18 +1,19 @@
 package com.ywj.gjwl.action;
 
 import org.apache.shiro.SecurityUtils;
+
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
 import com.ywj.gjwl.domain.User;
 import com.ywj.gjwl.utils.SysConstant;
 import com.ywj.gjwl.utils.UtilFuns;
-
 /**
- * @Description: 登录和退出类
- * @Author:		传智播客 java学院	传智.宋江
- * @Company:	http://java.itcast.cn
- * @CreateDate:	2014年10月31日
+ * 
+* @ClassName: LoginAction 
+* @Description: TODO
+* @author YWJ
+* @date 2017年6月28日 下午4:30:02
  */
 public class LoginAction extends BaseAction {
 
@@ -40,13 +41,16 @@ public class LoginAction extends BaseAction {
 //		}
 //		return "login";
 		
+		//如果没有输入用户名则回到原页面
 		if(UtilFuns.isEmpty(username)){
 			return "login";
 		}
 		
+		//采用shiro安全框架
 		try {
 			//1.得到Subject
 			Subject subject = SecurityUtils.getSubject();
+			
 			//2.调用登录方法
 			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 			subject.login(token);//当这一代码执行时，就会自动跳入到AuthRealm中认证方法

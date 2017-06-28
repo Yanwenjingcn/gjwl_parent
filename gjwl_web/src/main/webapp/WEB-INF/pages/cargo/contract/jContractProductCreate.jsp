@@ -39,6 +39,7 @@
 		<table class="commonTable" cellspacing="1">
 	        <tr>
 	            <td class="columnTitle">生产厂家：</td>
+	            
 	            <td class="tableContent">
 	            	 <s:select name="factory.id" list="factoryList" 
 	            				onchange="setFactoryName(this.options[this.selectedIndex].text);"
@@ -46,6 +47,7 @@
 	            				headerKey="" headerValue="--请选择--"/>
 	            				
 	            	<input type="hidden" id="factoryName" name="factoryName" value=""/>
+	            	
 	            </td>
 	            <td class="columnTitle">货号：</td>
 	            <td class="tableContentAuto"><input type="text" name="productNo" value=""/></td>
@@ -110,6 +112,7 @@
 	</thead>
 	<tbody class="tableBody" >
 	${links }
+	
  	<c:forEach items="${results}" var="o" varStatus="status">
 	<tr class="odd" onmouseover="this.className='highlight'" onmouseout="this.className='odd'" >
 		<td><input type="checkbox" name="id" value="${o.id}"/></td>
@@ -129,6 +132,7 @@
 		</td>
 	</tr>
 	
+	<!-- 附件的遍历 -->
 	<c:forEach items="${o.extCproducts}" var="ext" varStatus="status">
 	<tr height="40" class="odd" onmouseover="this.className='highlight'" onmouseout="this.className='odd'" >
 	    <td>&nbsp;</td>
@@ -143,6 +147,7 @@
 		<td>${ext.amount}</td>
 	</tr>
 	</c:forEach>
+	
 	
 	</c:forEach> 
 	

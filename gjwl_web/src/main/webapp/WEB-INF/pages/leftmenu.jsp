@@ -11,7 +11,9 @@
 			            <c:if test="${(moduleName eq module.remark) and module.ctype==1  }">
 				               <c:if test="${fn:contains(aaa,module.cpermission) eq false }">
 				                  <c:set var="aaa" value="${aaa},${module.cpermission }"/>
-			                      <li><a href="${ctx}/${module.curl}" onclick="linkHighlighted(this)" target="main" id="aa_1">${module.cpermission }</a></li>
+			                      <li>
+			                      <a href="${ctx}/${module.curl}" onclick="linkHighlighted(this)" target="main" id="aa_1">${module.cpermission }</a>
+			                      </li>
 			                 </c:if>  
 			            </c:if>
 			            

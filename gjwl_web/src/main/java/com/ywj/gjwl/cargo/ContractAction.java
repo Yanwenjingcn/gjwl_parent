@@ -7,20 +7,17 @@ import com.ywj.gjwl.domain.Contract;
 
 import com.ywj.gjwl.service.ContractService;
 import com.ywj.gjwl.utils.Page;
-
-/*
- * 部门管理的Action
+/**
+ * 
+* @ClassName: ContractAction 
+* @Description: 购销合同的action
+* @author YWJ
+* @date 2017年6月28日 下午7:33:18
  */
 public class ContractAction extends BaseAction implements ModelDriven<Contract> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	/**
-	 * 
-	 */
-	// 为什么这里的取值命名为model是有学问的，具体参考day02。08
+
 	private Contract model = new Contract();
 
 	public Contract getModel() {
@@ -38,7 +35,7 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 		this.page = page;
 	}
 
-	// 注入service
+	// 注入购销合同的service
 	private ContractService contractService;
 	public void setContractService(ContractService contractService) {
 		this.contractService = contractService;
@@ -46,12 +43,6 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 
 
 	// ==================================
-
-	/*
-	 * 分页的功能
-	 */
-
-
 
 	public String list() {
 		page = contractService.findPage("from Contract", page, Contract.class, null);
@@ -67,8 +58,7 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 	 * 查看
 	 */
 	public String toview() {
-		// 1.调用业务方法，根据id，得到对象
-		// 这种查看某项的具体内容的东西，都会从前台传送一个id号过来，这个id号也是可以被model直接接受的。
+		
 		Contract role = contractService.get(Contract.class, model.getId());
 		super.push(role);
 		return "toview";
@@ -81,19 +71,18 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 		return "tocreate";
 	}
 
-	/*
-	 * //获取要插入的数据 <s:select name="parent.id" list="#RoleList" headerKey=""
-	 * headerValue="--请选择--" listKey="id" listValue="RoleName"></s:select>
-	 * model对象能接收： parent id RoleName
-	 */
+/**
+ * 
+* @Title: insert 
+* @Description: 插入新的购销合同
+* @param @return    
+* @return String    
+* @throws
+ */
 	public String insert() {
-
-		// 插入数据库,这个函数是可以做两件事情的，要么就是save要么就是update。
-		// 当传入的数据没有oid的时候就是做save否则就是update
+		
 		contractService.saveOrUpdate(model);
 
-		// 返回新的页面，此时一般插入新的数据后一般再跳转到列表页面，
-		// 重定向
 		return "alist";
 	}
 
@@ -101,10 +90,12 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 	 * 跳转到更新数据的页面， 要从数据库中获取原本已存在的属性数据 在更新的页面中也是需要有更改父部门的下拉列表的，那么就是需要查找数据库中所有信息。
 	 */
 	public String toupdate() throws Exception {
-		// 获取原本已经存在的Role对象
+	
 		Contract role = contractService.get(Contract.class, model.getId());
+		
 		// 将对象压入值栈
 		super.push(role);
+		
 		// 跳转到更新页面
 		return "toupdate";
 	}
@@ -113,29 +104,76 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 	 * 将更新的内容保存至数据库中 返回至列表页面
 	 */
 	public String update() {
-
-		// 傻逼了，不能直接这么弄，因为原本年数据库里面是有值的，
-		// 但是直接更新的话，原来的值就没有了，得先把以前的值取出来。
+		//待修改的值
 		Contract obj = contractService.get(Contract.class, model.getId());
+		
 		// 设置修改了的值
-	
+		obj.setCustomName(model.getCustomName());
+		obj.setPrintStyle(model.getPrintStyle());
+		obj.setContractNo(model.getContractNo());
+		obj.setOfferor(model.getOfferor());
+		obj.setInputBy(model.getInputBy());
+		obj.setCheckBy(model.getCheckBy());
+		obj.setInspector(model.getInspector());
+		obj.setSigningDate(model.getSigningDate());
+		obj.setImportNum(model.getImportNum());
+		obj.setShipTime(model.getShipTime());
+		obj.setTradeTerms(model.getTradeTerms());
+		obj.setDeliveryPeriod(model.getDeliveryPeriod());
+		obj.setCrequest(model.getCrequest());
+		obj.setRemark(model.getRemark());
 
 		// 将模型接收到的数据保存至数据库
 		contractService.saveOrUpdate(obj);
+		
 		// 返回页面
 		return "alist";
 	}
 
+	
 	/*
 	 * 实现批量删除 同名复选框的的id取值有讲究
 	 */
-
 	public String delete() throws Exception {
 		// 接收id数组然后分割
 		String[] ids = model.getId().split(", ");
+		
 		// 调用业务层实现批量删除
 		contractService.delete(Contract.class, ids);
-
+		return "alist";
+	}
+	
+	/**
+	 * 
+	* @Title: submit 
+	* @Description:将某个合同提交。可以批量完成
+	*	 具有同名框的一组值struts2如何封装？
+	*提交就是改变购销合同的状态 将它由0改变为1，对应页面显示为“已提交”
+	* @param @return
+	* @param @throws Exception    
+	* @return String    
+	* @throws
+	 */
+	public String submit() throws Exception {
+		String[] ids=model.getId().split(", ");
+		
+		contractService.changeState(ids, 1);
+		return "alist";
+	}
+	
+	/**
+	 * 
+	* @Title: cancel 
+	* @Description: 取消合同的提交
+	* 	也就是改变合同的状态 由1改变为0，对应页面显示为“草稿”
+	* @param @return
+	* @param @throws Exception    
+	* @return String    
+	* @throws
+	 */
+	public String cancel() throws Exception {
+		String[] ids=model.getId().split(", ");
+		contractService.changeState(ids, 0);
 		return "alist";
 	}
 }

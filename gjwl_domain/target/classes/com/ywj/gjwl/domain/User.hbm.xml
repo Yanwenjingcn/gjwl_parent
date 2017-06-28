@@ -3,23 +3,6 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
     
-    
-    
-	<!-- 
-	 *  USER_ID              VARCHAR(40) not null,
-   DEPT_ID              VARCHAR(40),
-   
-   
-   USER_NAME            VARCHAR(50) comment '不能重复,可为中文',
-   PASSWORD             VARCHAR(64) comment 'shiro MD5密码32位',
-   STATE                INT comment '1启用0停用',
-   
-   CREATE_BY            VARCHAR(40) comment '登录人编号',
-   CREATE_DEPT          VARCHAR(40) comment '登录人所属部门编号',
-   CREATE_TIME          TIMESTAMP,
-   UPDATE_BY            VARCHAR(40),
-   UPDATE_TIME          TIMESTAMP,
-	 */ -->
 	 
     <hibernate-mapping package="com.ywj.gjwl.domain">
     	<class name="User" table="user_p" >
@@ -27,6 +10,7 @@
     	<id name="id" column="USER_ID">
 			<generator class="assigned"></generator>
 		</id>
+		
 		<property name="userName" column="USER_NAME"></property>
 		<property name="password" column="PASSWORD"></property>
 		<property name="state" column="STATE"></property>

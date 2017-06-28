@@ -48,8 +48,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	
-	//service的内容不是一成不变的，也是会随着我们的业务需求而不断变化，
-	//
+/**
+ * service的内容不是一成不变的，也是会随着我们的业务需求而不断变化，
+ */
 	public void saveOrUpdate(final User entity) {
 		//用户表和用户扩展表的为一对一关系，我们让他们的id号都相同
 		if(UtilFuns.isEmpty(entity.getId())){
@@ -75,6 +76,7 @@ public class UserServiceImpl implements UserService {
 			
 			//用spring的邮件相关内容发送邮件
 			//我此时还没有开启163的smtp服务
+			
 			Thread th = new Thread(new Runnable() {
 				public void run() {
 					try {
@@ -88,6 +90,9 @@ public class UserServiceImpl implements UserService {
 				}
 			});
 			
+			/**
+			 * 开启线程
+			 */
 			th.start();
 			
 			
@@ -114,13 +119,15 @@ public class UserServiceImpl implements UserService {
 		baseDao.deleteById(entityClass, id);
 	}
 
+	/**
+	 * 批量删除用户？
+	 */
 	public void delete(Class<User> entityClass, Serializable[] ids) {
 		//调用自身的deleteById方法删除数据
 		for(Serializable id:ids){
 			this.deleteById(User.class, id);
 		}
 		
-		//baseDao.delete(entityClass, ids);
 	}
 
 }

@@ -28,6 +28,7 @@
 				</li>					
 				<li><a href="${ctx}/basicinfo/factoryAction_list" onclick="linkHighlighted(this)" target="main" id="aa_1">厂家信息</a></li>
 			</ul> --%>
+			
 			 <%@include file="../leftmenu.jsp" %> 
         </div>
         </div>
