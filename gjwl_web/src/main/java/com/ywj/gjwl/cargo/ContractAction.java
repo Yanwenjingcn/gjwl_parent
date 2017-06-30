@@ -1,12 +1,14 @@
 package com.ywj.gjwl.cargo;
 
+import javax.jws.soap.SOAPBinding.Use;
+
 import com.opensymphony.xwork2.ModelDriven;
 import com.ywj.gjwl.action.BaseAction;
 import com.ywj.gjwl.domain.Contract;
-
-
+import com.ywj.gjwl.domain.User;
 import com.ywj.gjwl.service.ContractService;
 import com.ywj.gjwl.utils.Page;
+import com.ywj.gjwl.utils.SysConstant;
 /**
  * 
 * @ClassName: ContractAction 
@@ -42,10 +44,42 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 	}
 
 
-	// ==================================
+	// ===========================================================
 
+	/**
+	 * 
+	* @Title: list 
+	* @Description: 合同的分页展示，提供细粒度的查询结果
+	* @param @return    
+	* @return String    
+	* @throws
+	 */
 	public String list() {
-		page = contractService.findPage("from Contract", page, Contract.class, null);
+		
+		String hql="from Contract where 1=1";
+		//获取当前用户
+		User user=super.getCurUser();
+		//确定当前用户等级并给出他能管理的细粒度数据
+		int degree=user.getUserinfo().getDegree();
+		
+		if(degree==4){
+			//说明是员工
+			hql+="and createBy='"+user.getId()+"'";
+		}else if (degree==3) {
+			//说明是部门经理，管理本部门的.可以查看本部门所有员工创建的合同内容
+			hql+="and createDept='"+user.getDept().getId()+"'";
+		}else if (degree==2) {
+			//可管理本部门及下属部门
+			
+		}else if (degree==1) {
+			//副总，有的部门内容无权查看
+			
+		}else if (degree==0) {
+			//总经理，可以查看所有记录
+			
+		}
+		
+		page = contractService.findPage(hql, page, Contract.class, null);
 		// 设置分页的url
 		page.setUrl("contractAction_list");
 
@@ -81,13 +115,26 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
  */
 	public String insert() {
 		
+		//细粒度控制，不同用户能看到的合同数据不一样
+		User user=(User) session.get(SysConstant.CURRENT_USER_INFO);
+		//通过区分合同创建者的id和创建者所属于的部门来抉择
+		model.setCreateBy(user.getId());
+		model.setCreateDept(user.getDept().getId());
+		
 		contractService.saveOrUpdate(model);
 
 		return "alist";
 	}
+	
 
-	/*
-	 * 跳转到更新数据的页面， 要从数据库中获取原本已存在的属性数据 在更新的页面中也是需要有更改父部门的下拉列表的，那么就是需要查找数据库中所有信息。
+	/**
+	 * 
+	* @Title: toupdate 
+	* @Description: 跳转到更新数据的页面， 要从数据库中获取原本已存在的属性数据 在更新的页面中也是需要有更改父部门的下拉列表的，那么就是需要查找数据库中所有信息。
+	* @param @return
+	* @param @throws Exception    
+	* @return String    
+	* @throws
 	 */
 	public String toupdate() throws Exception {
 	

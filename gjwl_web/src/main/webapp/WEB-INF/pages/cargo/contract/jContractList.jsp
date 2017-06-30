@@ -74,7 +74,7 @@
 		    /
 		    <c:set var="extNo" value="0"></c:set>
 		    <c:forEach items="${o.contractProducts }"  var="cp" >
-		        <c:if test="${cp.extCproducts.size()!=0 }">
+		        <c:if test="${cp.extCproducts.size()!=0 }"><!-- 这里的size其实就是一个函数，求出集合中内容的个数 -->
 		            <c:set var="extNo" value="${extNo+cp.extCproducts.size() }"></c:set>
 		        </c:if>
 		    	

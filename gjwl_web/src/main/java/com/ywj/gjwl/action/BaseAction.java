@@ -9,6 +9,8 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import com.ywj.gjwl.domain.User;
+import com.ywj.gjwl.utils.SysConstant;
 
 /**
  * 
@@ -66,6 +68,18 @@ public class BaseAction extends ActionSupport implements RequestAware, SessionAw
 	 */
 	public void put(String key,Object value){
 		ActionContext.getContext().put(key, value);
+	}
+	
+	/**
+	 * 
+	* @Title: getCurUser 
+	* @Description: 获取当前用户
+	* @param @return    
+	* @return User    
+	* @throws
+	 */
+	public User getCurUser(){
+		return (User) session.get(SysConstant.CURRENT_USER_INFO);
 	}
 
 }

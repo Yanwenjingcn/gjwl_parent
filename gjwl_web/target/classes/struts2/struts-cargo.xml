@@ -11,26 +11,43 @@
 	<!-- struts的包名是唯一的， -->
 	<!-- 这里extends继承的是struts.xml中的内容，应该就和java中的继承差不多的吧 -->
 	<package name="cargo" namespace="/cargo" extends="default">
-	
-	<!-- 这个里面的class的内容是spring中id的值 -->
+
+		<!-- 这个里面的class的内容是spring中id的值 -->
 		<action name="contractAction_*" class="contractAction" method="{1}">
-			<result name="list">/WEB-INF/pages/cargo/contract/jContractList.jsp</result>
-			<result name="toview">/WEB-INF/pages/cargo/contract/jContractView.jsp</result>
-			<result name="tocreate">/WEB-INF/pages/cargo/contract/jContractCreate.jsp</result>
-			<!-- 重定向到Action,这么写 ,并且这些页面跳转是可以重用的-->
+			<result name="list">/WEB-INF/pages/cargo/contract/jContractList.jsp
+			</result>
+			<result name="toview">/WEB-INF/pages/cargo/contract/jContractView.jsp
+			</result>
+			<result name="tocreate">/WEB-INF/pages/cargo/contract/jContractCreate.jsp
+			</result>
+			<!-- 重定向到Action,这么写 ,并且这些页面跳转是可以重用的 -->
 			<result name="alist" type="redirectAction">contractAction_list</result>
-			<result name="toupdate">/WEB-INF/pages/cargo/contract/jContractUpdate.jsp</result>
+			<result name="toupdate">/WEB-INF/pages/cargo/contract/jContractUpdate.jsp
+			</result>
 		</action>
-		
-		<action name="contractProductAction_*" class="contractProductAction" method="{1}">
-			<result name="tocreate">/WEB-INF/pages/cargo/contract/jContractProductCreate.jsp</result>
-			<result name="toupdate">/WEB-INF/pages/cargo/contract/jContractProductUpdate.jsp</result>
-			
+
+		<action name="contractProductAction_*" class="contractProductAction"
+			method="{1}">
+			<result name="tocreate">/WEB-INF/pages/cargo/contract/jContractProductCreate.jsp
+			</result>
+			<result name="toupdate">/WEB-INF/pages/cargo/contract/jContractProductUpdate.jsp
+			</result>
+
 		</action>
-		
-		<action name="extCproductAction_*" class="extCproductAction" method="{1}">
-			<result name="tocreate">/WEB-INF/pages/cargo/contract/jExtCproductCreate.jsp</result>
-			<result name="toupdate">/WEB-INF/pages/cargo/contract/jExtCproductUpdate.jsp</result>
+
+		<action name="extCproductAction_*" class="extCproductAction"
+			method="{1}">
+			<result name="tocreate">/WEB-INF/pages/cargo/contract/jExtCproductCreate.jsp
+			</result>
+			<result name="toupdate">/WEB-INF/pages/cargo/contract/jExtCproductUpdate.jsp
+			</result>
+		</action>
+
+		<action name="outProductAction_*" class="outProductAction"
+			method="{1}">
+			<result name="toedit">/WEB-INF/pages/cargo/outproduct/jOutProduct.jsp
+			</result>
+
 		</action>
 
 

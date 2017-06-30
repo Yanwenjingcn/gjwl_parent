@@ -56,4 +56,9 @@
 		<property name="factoryService" ref="factoryService"></property>
 		<property name="extCproductService" ref="extCproductService"></property>
 	</bean>
+	
+	<bean id="outProductAction" class="com.ywj.gjwl.cargo.OutProductAction"
+		scope="prototype">
+		<property name="contractProductService" ref="contractProductService"></property>
+	</bean>
 </beans>
