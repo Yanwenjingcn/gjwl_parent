@@ -58,5 +58,17 @@
 	<bean id="extCproductService" class="com.ywj.gjwl.service.impl.ExtCproductServiceImpl">
 		<property name="baseDao" ref="baseDao"></property>
 	</bean>
+	
+	<bean id="exportProductService" class="com.ywj.gjwl.service.impl.ExportProductServiceImpl">
+		<property name="baseDao" ref="baseDao"></property>
+	</bean>
+	
+	<bean id="exportService" class="com.ywj.gjwl.service.impl.ExportServiceImpl">
+		<property name="baseDao" ref="baseDao"></property>
+	</bean>
+	
+	<bean id="extEproductService" class="com.ywj.gjwl.service.impl.ExtEproductServiceImpl">
+		<property name="baseDao" ref="baseDao"></property>
+	</bean>
 
 </beans>

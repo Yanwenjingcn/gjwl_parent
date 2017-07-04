@@ -1,6 +1,9 @@
 package com.ywj.gjwl.cargo;
 
 import javax.jws.soap.SOAPBinding.Use;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ModelDriven;
 import com.ywj.gjwl.action.BaseAction;
@@ -57,7 +60,7 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 	public String list() {
 		
 		String hql="from Contract where 1=1";
-		//获取当前用户
+		//获取当前用户，在baseaction中抽象出来的一个函数
 		User user=super.getCurUser();
 		//确定当前用户等级并给出他能管理的细粒度数据
 		int degree=user.getUserinfo().getDegree();
@@ -79,12 +82,14 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 			
 		}
 		
-		page = contractService.findPage(hql, page, Contract.class, null);
+		contractService.findPage(hql, page, Contract.class, null);
+		System.out.println(page.getResults().size());
 		// 设置分页的url
 		page.setUrl("contractAction_list");
 
 		// 将数据压入值栈
 		super.push(page);
+		
 		return "list";
 	}
 
@@ -222,5 +227,26 @@ public class ContractAction extends BaseAction implements ModelDriven<Contract> 
 		String[] ids=model.getId().split(", ");
 		contractService.changeState(ids, 0);
 		return "alist";
+	}
+	
+	
+	
+	/**
+	 * 打印
+	 */
+	public String print() throws Exception {
+		//1.根据购销合同的id,得到购销合同对象
+		Contract contract = contractService.get(Contract.class, model.getId());
+		
+		//2.指定path
+		String path = ServletActionContext.getServletContext().getRealPath("/");//应用程序的根路径
+		
+		//3.指定response
+		HttpServletResponse response = ServletActionContext.getResponse();
+		
+		ContractPrint cp = new ContractPrint();
+		cp.print(contract, path, response);
+		
+		return NONE;
 	}
 }

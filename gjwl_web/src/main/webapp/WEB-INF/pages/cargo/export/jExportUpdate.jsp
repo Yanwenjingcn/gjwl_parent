@@ -9,8 +9,12 @@
 	<script type="text/javascript" src="${ctx}/js/datepicker/WdatePicker.js"></script>
 
 <script language="JavaScript">
+//jquery的函数，只要页面已加载，救护去执行这个函数的
     $().ready(function(){
-		${mRecordData}
+    	
+		${mRecordData}//这个不是jquery的，还是表达式，具体 什么的表达式我还是不太知道
+		
+		//=====================也可以采用ajax的方式执行，只是这样会去执行两次
 		//发送ajax请求-------------返回json------------后面就去组织数据（调用函数）
 		//当进入更新页面时-----------直接获取服务器返回的串
 		
@@ -18,11 +22,12 @@
     });
     
 
-	/* 实现表格序号列自动调整 created by wyj 20081219 */
+	/* 实现表格序号列自动调整 */
 	function sortnoTR(){
 		sortno('mRecordTable', 2, 1);
 	}
 		
+	//功能是往表格中添加行
 	function addTRRecord(objId, id, productNo, cnumber, grossWeight, netWeight, sizeLength, sizeWidth, sizeHeight, exPrice, tax) {
 		
 		var _tmpSelect = "";

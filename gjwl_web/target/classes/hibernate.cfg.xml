@@ -33,5 +33,9 @@
 		<mapping resource="com/ywj/gjwl/domain/ExtCproduct.hbm.xml"></mapping>
 		<mapping resource="com/ywj/gjwl/domain/Factory.hbm.xml"></mapping>
 		
+		<mapping resource="com/ywj/gjwl/domain/Export.hbm.xml"></mapping>
+		<mapping resource="com/ywj/gjwl/domain/ExportProduct.hbm.xml"></mapping>
+		<mapping resource="com/ywj/gjwl/domain/ExtEproduct.hbm.xml"></mapping>
+		
 	</session-factory>
 	</hibernate-configuration>
