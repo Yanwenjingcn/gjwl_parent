@@ -63,11 +63,18 @@
 	</bean>
 	
 	
-	<!--  -->
+	<!--报运管理  -->
 	<bean id="exportAction" class="com.ywj.gjwl.cargo.ExportAction"
 		scope="prototype">
 		<property name="exportService" ref="exportService"></property>
 		<property name="contractService" ref="contractService"></property>
 		<property name="exportProductService" ref="exportProductService"></property>
 	</bean>
+	
+	<!-- 统计分析 -->
+	<bean id="statChartAction" class="com.ywj.gjwl.stat.StatChartAction"
+		scope="prototype">
+		<property name="sqlDao" ref="sqlDao"/>
+	</bean>
+	
 </beans>

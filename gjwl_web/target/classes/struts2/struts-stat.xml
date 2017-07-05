@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+
+	<!-- struts的包名是唯一的， -->
+	<!-- 这里extends继承的是struts.xml中的内容，应该就和java中的继承差不多的吧 -->
+	<package name="stat" namespace="/stat" extends="default">
+
+		<!-- 这个里面的class的内容是spring中id的值 -->
+		<action name="statChartAction_*" class="statChartAction" method="{1}">
+		<!-- strut2的配置中是可以设置参数的!!!!-->
+			<result name="factorysale">/WEB-INF/pages/stat/chart/jStat.jsp?forward=factorysale</result>
+			<result name="onlineinfo">/WEB-INF/pages/stat/chart/jStat.jsp?forward=onlineinfo</result>
+			<result name="productsale">/WEB-INF/pages/stat/chart/jStat.jsp?forward=productsale</result>
+			<result name="factorysale01">/WEB-INF/pages/stat/chart/column3D.jsp</result>
+		</action>
+
+	</package>
+
+
+</struts>
+	
